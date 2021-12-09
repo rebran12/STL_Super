@@ -2,6 +2,7 @@ numpy
 seaborn
 pandas
 streamlit
+plotly
 matplotlib
 datetime
 pillow

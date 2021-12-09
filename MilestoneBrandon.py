@@ -6,6 +6,8 @@ import streamlit as st
 import matplotlib
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import plotly.express as px
+import plotly.figure_factory as ff
 import datetime as dt
 import calendar
 import time
@@ -111,15 +113,12 @@ def main():
             measure_selection = st.selectbox('Choose a Measure:', ['quantity','unit_price','total','cogs','gross_income'], key='1')
         with col2:
             fact_selection = st.selectbox('Choose a Fact:', ['product_line','city','payment','gender','customer_type','branch','MonthName','Hour'], key='1')
-            ax=df.groupby([fact_selection])[measure_selection].aggregate('sum').reset_index().sort_values(measure_selection,ascending=False)
+            ax=df.groupby([fact_selection])[measure_selection].aggregate('sum').reset_index().sort_values(measure_selection,ascending=True)
+            dx=df.groupby([fact_selection])[measure_selection].aggregate('sum').reset_index().sort_values(fact_selection,ascending=True)
             #cust_data=ax xxx gatau mau diapain tar aj
         with col3:
-            type_of_plot=st.selectbox("Select Type of Plot",["Bar Chart","Horizontal Bar"])
+            type_of_plot=st.selectbox("Select Type of Plot",["Bar Chart","Horizontal Bar", "Scatter Bar", "Plot Bar"])
 
-        #col4 = st.columns(1)
-        #col4 = st.columns(1)
-        #col4,col5=st.columns(2)
-        #st.button("Generate Plot")
         if type_of_plot=='Bar Chart':
             st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
             plt.xticks(rotation=45)
@@ -127,24 +126,72 @@ def main():
             plt.autoscale()
             plt.tight_layout(rect=(0, 0.25, 1, 1))
             plt.bar(ax[fact_selection], ax[measure_selection], align='center')
-            plt.ylabel(measure_selection)
+            plt.ylabel(fact_selection)
             st.pyplot()
     
 
         elif type_of_plot=='Horizontal Bar':
             st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
-            plt.barh(ax[fact_selection], ax[measure_selection])
+            plt.barh(ax[fact_selection], ax[measure_selection], align='center')
+            #plt.barh(ax[measure_selection], ax[fact_selection])
             st.pyplot()
+        
+        
+        elif type_of_plot=='Scatter Bar':
+            st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
+            plt.autoscale()
+            plt.xticks(rotation=45)
+            plt.xlabel(measure_selection)
+            plt.tight_layout(rect=(0, 0.25, 1, 1))
+            plt.scatter(ax[fact_selection], ax[measure_selection],color='green')
+            plt.ylabel(fact_selection)
+            plt.grid(True)
+            st.pyplot()
+            
+            
+        elif type_of_plot=='Plot Bar':
+            st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
+            plt.autoscale()
+            plt.xticks(rotation=45)
+            plt.xlabel(measure_selection)
+            plt.tight_layout(rect=(0, 0.25, 1, 1))
+            plt.plot(ax[fact_selection], ax[measure_selection],color='red')
+            plt.ylabel(fact_selection)
+            plt.grid(True)
+            st.pyplot()        
 
         st.subheader("Donut Chart")
         #col5 = st.columns(1)
         #st.button('Donut Chart')
-        st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,fact_selection,measure_selection))
-        labels = ax[fact_selection].unique()
+        st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,measure_selection,fact_selection))
+        labels = dx[fact_selection].unique()
+        #labels = ax[measure_selection].unique()
+        #values =df.groupby([measure_selection])[fact_selection].sum()
         values =df.groupby([fact_selection])[measure_selection].sum()
         fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.4)])
+        #fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.4)])
         st.plotly_chart(fig)
-
+        
+        
+        
+        # st.subheader("FF Chart")
+        # st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,measure_selection,fact_selection))
+        # x1 = np.random.randn(200) - 2
+        # x2 = np.random.randn(200)
+        # x3 = np.random.randn(200) + 2
+        # labels = [x1, x2, x3]
+        # values =df.groupby([fact_selection])[measure_selection].sum()
+        # fig = ff.create_distplot(
+        #  labels, values, bin_size=[.1, .25, .5])
+        # st.plotly_chart(fig, use_container_width=True)
+        
+        # st.subheader("Bubble Chart")
+        # st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,measure_selection,fact_selection))
+        # labels = dx[fact_selection].unique()
+        # values =df.groupby([fact_selection])[measure_selection].sum()
+        # fig = go.Figure(go.Bar(labels, values, orientation='h'))
+        # st.plotly_chart(fig)
+        
 
     elif choice=='Hypothesis Test':
         st.image("Anova.png",use_column_width=True)

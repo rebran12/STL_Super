@@ -21,9 +21,7 @@ st.sidebar.markdown("Dashboard Analisis pada data supermarket sales yang mempuny
 
 def main():
 
-    data=st.sidebar.file_uploader("Upload files Supermarket_Sales:",type=['csv','xlsx','txt','json'])
-    if data is not None:
-        df=pd.read_csv(data)
+    df = pd.read_csv("supermarket_sales_p.csv")
 
     menu = ['Explore your dataset','Create some visuals','Hypothesis Test'] #catatan duar
     choice=st.sidebar.selectbox("Menu",menu)
@@ -198,6 +196,7 @@ maka H0 Diterima
 Setelah melakukan ANOVA test, didapatlah f-statistik dan juga **p-value** sebagai berikut
 - F-Statistik = 0.4423
 - P-Value     = 0.2006
+
 P-Value lebih besar daripada level signifikan yang telah di tentukan''')
         
         

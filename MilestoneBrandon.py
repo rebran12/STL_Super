@@ -23,24 +23,24 @@ st.sidebar.markdown("Dashboard Analisis pada data supermarket sales yang mempuny
 
 def main():
 
-    df = pd.read_csv("supermarket_sales_p.csv")
+    df = pd.read_csv("supermarket_sales_p.csv") #read data dari supermarket sales yang telah di proceed
 
-    menu = ['Explore your dataset','Create some visuals','Hypothesis Test'] #catatan duar
+    menu = ['Explore your dataset','Visualisasi Dataset','Hypothesis Test'] #Menu Sidebar
     choice=st.sidebar.selectbox("Menu",menu)
     if choice=='Explore your dataset':
         st.image("analysis1.jpg",use_column_width=True)
         st.info("Dashboard ini dibuat sebagai halaman data explore, dimana data dapat ditampilkan sesuai dengan yg di inginkan, dapat juga melihat dataset summary, dan juga apakah terdapat data yang missing values.")
         st.header("Explore your dataset")
-        #df=pd.read_csv(data)
+        #df=pd.read_csv(data) test23
 
 
-        if st.checkbox("Show Dataset"):
+        if st.checkbox("Show Dataset"): #checkbox untuk menampilkan dataset
             number=st.number_input("Number of Rows to view",5,15)
             st.dataframe(df.head(number))
-            st.success("Data loaded successfully")
+            st.success("Data loaded successfully") 
 
 
-            data_dim= st.radio("Shape of the dataset:", ("Number of Rows","Number of Columns"))
+            data_dim= st.radio("Shape of the dataset:", ("Number of Rows","Number of Columns")) #radio button widget
             if st.button("Show Dimension"):
                 if data_dim== 'Number of Rows':
                     st.write(df.shape[0])
@@ -50,10 +50,10 @@ def main():
                     st.write(df.shape)
 
             Info =['Dataset Information','Display Multiple Columns','Display the dataset summary','Check for missing values in the dataset']
-            options=st.selectbox("Know More",Info)
+            options=st.selectbox("Pilihan - pilihan terhadap dataset",Info)
 
 
-            if options==('Dataset Information'):
+            if options==('Dataset Information'): #cemacem dataset
                 st.markdown("**Date Time**: Time of purchase.")
                 st.markdown("**Branch**: Branches of the Supermarke)t.")
                 st.markdown("**City**: Supermarkets location.")
@@ -72,12 +72,12 @@ def main():
                 st.markdown("**Rating**:Customer stratification rating for shopping experience(On a scale of 1 to 10).")
 
 
-            if options=='Display Multiple Columns':
+            if options=='Display Multiple Columns': #bila ingin menampilkan kolom tertentu
                  selected_columns=st.multiselect('Select Preferred Columns:',df.columns)
                  df1=df[selected_columns]
                  st.dataframe(df1)
 
-            if options=='Check for missing values in the dataset':
+            if options=='Check for missing values in the dataset': 
                  st.write(df.isnull().sum(axis=0)) #cekk null values
                  if st.button("Drop Null Values"):
                      df=df.dropna() #drop null values
@@ -88,27 +88,27 @@ def main():
                  st.write(df.describe().T)
                  
 
-    elif choice=='Create some visuals':
+    elif choice=='Visualisasi Dataset':
         st.image("visuals.jpeg",use_column_width=True)
         st.info("Dashboard ini dibuat sebagai halaman Visualisasi Data, dimana data dapat divisualisasikan sesuai dengan meassure, fact / labels, serta bar chart yg di inginkan")
-        st.header("Create some visuals")
+        st.header("Visualisasikan dataset yang anda inginkan")
         #df=pd.read_csv(data)
             #st.dataframe(df.head(50))
         df['date_time']=pd.to_datetime(df['date_time'])
 
         df['Month']=pd.DatetimeIndex(df['date_time']).month
-
+        #hadeuh
         df['MonthName'] = df['Month'].apply(lambda x: calendar.month_abbr[x])
         df['date_time'] = pd.to_datetime(df['date_time'])
         df['Hour'] = (df['date_time']).dt.hour
 
 
         if st.button("Show Dataset again"):
-            st.dataframe(df.head(50))
+            st.dataframe(df.head(50)) #menampilkan kembali 50 dataset apabila diperlukan
 
         col1,col2,col3=st.columns(3)
 
-        st.subheader("Bar Chart / Horizontal Bar Chart")
+        st.subheader("Bar Chart / Horizontal Bar Chart / Scatter Bar / Plot Bar")
         with col1:
             measure_selection = st.selectbox('Choose a Measure:', ['quantity','unit_price','total','cogs','gross_income'], key='1')
         with col2:
@@ -120,7 +120,7 @@ def main():
             type_of_plot=st.selectbox("Select Type of Plot",["Bar Chart","Horizontal Bar", "Scatter Bar", "Plot Bar"])
 
         if type_of_plot=='Bar Chart':
-            st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
+            st.success("Menampilkan Custom Plot {} untuk pengukuran {} terhadap {}".format(type_of_plot,measure_selection,fact_selection))
             plt.xticks(rotation=45)
                 #plt.subplots(figsize=(15, 7))
             plt.autoscale()
@@ -131,14 +131,14 @@ def main():
     
 
         elif type_of_plot=='Horizontal Bar':
-            st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
+            st.success("Menampilkan Custom Plot {} untuk pengukuran {} terhadap {}".format(type_of_plot,measure_selection,fact_selection))
             plt.barh(ax[fact_selection], ax[measure_selection], align='center')
             #plt.barh(ax[measure_selection], ax[fact_selection])
             st.pyplot()
         
         
         elif type_of_plot=='Scatter Bar':
-            st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
+            st.success("Menampilkan Custom Plot {} untuk pengukuran {} terhadap {}".format(type_of_plot,measure_selection,fact_selection))
             plt.autoscale()
             plt.xticks(rotation=45)
             plt.xlabel(measure_selection)
@@ -150,7 +150,7 @@ def main():
             
             
         elif type_of_plot=='Plot Bar':
-            st.success("Generating Customizable Plot of {} Type for {} relative to {}".format(type_of_plot,measure_selection,fact_selection))
+            st.success("Menampilkan Custom Plot {} untuk pengukuran {} terhadap {}".format(type_of_plot,measure_selection,fact_selection))
             plt.autoscale()
             plt.xticks(rotation=45)
             plt.xlabel(measure_selection)
@@ -163,7 +163,7 @@ def main():
         st.subheader("Donut Chart")
         #col5 = st.columns(1)
         #st.button('Donut Chart')
-        st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,measure_selection,fact_selection))
+        st.success("Menampilkan Donut Chart untuk pengukuran {} terhadap {}".format(measure_selection,fact_selection))
         labels = dx[fact_selection].unique()
         #labels = ax[measure_selection].unique()
         #values =df.groupby([measure_selection])[fact_selection].sum()
@@ -175,7 +175,7 @@ def main():
         
         
         # st.subheader("FF Chart")
-        # st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,measure_selection,fact_selection))
+        # st.success("Menampilkan Custom Plot {} untuk pengukuran {} terhadap {}".format(type_of_plot,measure_selection,fact_selection))
         # x1 = np.random.randn(200) - 2
         # x2 = np.random.randn(200)
         # x3 = np.random.randn(200) + 2
@@ -186,7 +186,7 @@ def main():
         # st.plotly_chart(fig, use_container_width=True)
         
         # st.subheader("Bubble Chart")
-        # st.success("Generating Customizable Plot of {} Type representing the distribution of {} by {}".format(type_of_plot,measure_selection,fact_selection))
+        # st.success("Menampilkan Custom Plot {} untuk pengukuran {} terhadap {}".format(type_of_plot,measure_selection,fact_selection))
         # labels = dx[fact_selection].unique()
         # values =df.groupby([fact_selection])[measure_selection].sum()
         # fig = go.Figure(go.Bar(labels, values, orientation='h'))

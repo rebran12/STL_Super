@@ -3,7 +3,6 @@ seaborn
 pandas
 streamlit
 matplotlib
-plotly.graph_objects
 datetime
 calendar
 time
